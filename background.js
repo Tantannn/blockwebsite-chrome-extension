@@ -1,15 +1,38 @@
 
 const blockedUrls = [];
 
-chrome.webRequest.onbeforerequest.addListener(
-  function(details) {
-    return {cancel: true};
-  },
-  {urls: 
-"https://www.google.com/"
-},
-  ["blocking"]
-);
+
+// chrome.runtime.onInstalled.addListener(function() {
+//   chrome.declarativeNetRequest.updateDynamicRules({
+//     options:  {
+//       id: 'block-google',
+//       priority: 1,
+//       action: {
+//         type: 'block'
+//       },
+//       condition: {
+//         urlFilter: {
+//           hostSuffix: 'google.com'
+//         }
+//       }
+//     }
+//   });
+// });
+
+chrome.declarativeNetRequest.updateDynamicRules({
+  addRules: {
+      id: 'block-google',
+      priority: 1,
+      action: {
+        type: 'block'
+      },
+      condition: {
+        urlFilter: {
+          hostSuffix: 'google.com'
+        }
+      }
+    }
+});
 
 // To add URLs dynamically, you can use chrome.storage to store and retrieve blocked URLs
 chrome.storage.sync.get(["blockedUrls"], function(result) {

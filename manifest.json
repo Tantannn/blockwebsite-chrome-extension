@@ -4,8 +4,9 @@
   "version": "1.0",
   "description": "Blocks specific URLs",
   "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
     "webRequest",
-    "webRequestBlocking",
     "storage",
     "tabs"
   ],
