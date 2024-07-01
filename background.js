@@ -2,23 +2,32 @@
 const blockedUrls = [];
 
 
-// chrome.runtime.onInstalled.addListener(function() {
-//   chrome.declarativeNetRequest.updateDynamicRules({
-//     options:  {
-//       id: 'block-google',
-//       priority: 1,
-//       action: {
-//         type: 'block'
-//       },
-//       condition: {
-//         urlFilter: {
-//           hostSuffix: 'google.com'
-//         }
-//       }
-//     }
-//   });
-// });
-
+chrome.runtime.onInstalled.addListener(function() {
+  chrome.declarativeNetRequest.updateDynamicRules({
+    options:  {
+      id: 'block-google',
+      priority: 1,
+      action: {
+        type: 'block'
+      },
+      condition: {
+        urlFilter: {
+          hostSuffix: 'google.com'
+        }
+      }
+    }
+  });
+});
+const randomFunc = () => {
+  if (window.location.hostname.includes('google')) {
+    let newNode = document.createElement('div');
+    newNode.id = 'hello'
+    newNode.style.cssText = "position:absolute,width:100%,height:100%;z-index:1000;background-color:black"
+    document.body.style.overflow = "hidden";
+    document.body.appendChild(newNode)
+  } 
+}
+randomFunc()
 chrome.declarativeNetRequest.updateDynamicRules({
   addRules: {
       id: 'block-google',
