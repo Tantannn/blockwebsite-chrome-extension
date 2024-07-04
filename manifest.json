@@ -10,9 +10,6 @@
     "storage",
     "tabs"
   ],
-  "background": {
-    "service_worker": "background.js"
-  },
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
@@ -20,6 +17,9 @@
       "48": "hello_extensions.png",
       "128": "hello_extensions.png"
     }
+  },
+  "background": {
+    "service_worker": "background.js"
   },
   "icons": {
     "16": "hello_extensions.png",

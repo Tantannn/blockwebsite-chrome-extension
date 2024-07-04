@@ -1,64 +1,48 @@
+const blockedUrls = ["https://9gag.com/",'https://www.google.com/'];
+console.log(blockedUrls);
+chrome.declarativeNetRequest.getDynamicRules(prevRules => {
+  console.log(prevRules);
+  
+  // blockedUrls.forEach((domain, index) => {
+    // let id = index + 1;
 
-const blockedUrls = [];
+    chrome.declarativeNetRequest.updateDynamicRules({
+      // addRules: [{
+      //   "id": id,
+      //   "priority": 1,
+      //   "action": { "type": "block" },
+      //   "condition": { "urlFilter": domain, "resourceTypes": ["main_frame"] }
+      // }],
+      removeRuleIds: [2]
+    });
+  // });
+})
 
+// chrome.declarativeNetRequest.getDynamicRules(previousRules => {
+//   const previousRuleIds = previousRules.map(rule => rule.id);
+//   chrome.declarativeNetRequest.updateDynamicRules({
+//     removeRuleIds: previousRuleIds,
+//     addRules: blockedUrls
+//   });
+// });
 
-chrome.runtime.onInstalled.addListener(function() {
-  chrome.declarativeNetRequest.updateDynamicRules({
-    options:  {
-      id: 'block-google',
-      priority: 1,
-      action: {
-        type: 'block'
-      },
-      condition: {
-        urlFilter: {
-          hostSuffix: 'google.com'
-        }
-      }
-    }
-  });
-});
-const randomFunc = () => {
-  if (window.location.hostname.includes('google')) {
-    let newNode = document.createElement('div');
-    newNode.id = 'hello'
-    newNode.style.cssText = "position:absolute,width:100%,height:100%;z-index:1000;background-color:black"
-    document.body.style.overflow = "hidden";
-    document.body.appendChild(newNode)
-  } 
-}
-randomFunc()
-chrome.declarativeNetRequest.updateDynamicRules({
-  addRules: {
-      id: 'block-google',
-      priority: 1,
-      action: {
-        type: 'block'
-      },
-      condition: {
-        urlFilter: {
-          hostSuffix: 'google.com'
-        }
-      }
-    }
-});
 
 // To add URLs dynamically, you can use chrome.storage to store and retrieve blocked URLs
-chrome.storage.sync.get(["blockedUrls"], function(result) {
-  if (result.blockedUrls) {
-    blockedUrls.push(...result.blockedUrls);
-  }
-});
-console.log(blockedUrls );
+// chrome.storage.sync.get(["blockedUrls"], function(result) {
+//   if (result.blockedUrls) {
+//     blockedUrls.push(...result.blockedUrls);
+//   }
+// });
+//
+//
+// // Add a listener for changes to blocked URLs
+// chrome.storage.onChanged.addListener(function(changes, areaName) {
+//   if (areaName === "sync" && changes.blockedUrls) {
+//     blockedUrls.length = 0;
+//     blockedUrls.push(...changes.blockedUrls.newValue);
+//   }
+// });
 
-
-// Add a listener for changes to blocked URLs
-chrome.storage.onChanged.addListener(function(changes, areaName) {
-  if (areaName === "sync" && changes.blockedUrls) {
-    blockedUrls.length = 0;
-    blockedUrls.push(...changes.blockedUrls.newValue);
-  }
-});
 
 // changeAllURL();
 // function changeAllURL(text){
