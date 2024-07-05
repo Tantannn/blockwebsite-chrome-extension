@@ -1,33 +1,28 @@
-const blockedUrls = ["https://9gag.com/",'https://www.google.com/'];
+const blockedUrls = ["https://9gag.com/",'https://www.facebook.com/'];
 console.log(blockedUrls);
-chrome.declarativeNetRequest.getDynamicRules(prevRules => {
-  console.log(prevRules);
+
+const newRules = [];
+blockedUrls.forEach((domain, index) => {
+  newRules.push({
+    "id": index + 1,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": { "urlFilter": domain, "resourceTypes": ["main_frame"] }
+  });
+});
+
+chrome.declarativeNetRequest.getDynamicRules(previousRules => {
+  console.log(previousRules);
   
-  // blockedUrls.forEach((domain, index) => {
-    // let id = index + 1;
-
-    chrome.declarativeNetRequest.updateDynamicRules({
-      // addRules: [{
-      //   "id": id,
-      //   "priority": 1,
-      //   "action": { "type": "block" },
-      //   "condition": { "urlFilter": domain, "resourceTypes": ["main_frame"] }
-      // }],
-      removeRuleIds: [2]
-    });
-  // });
-})
-
-// chrome.declarativeNetRequest.getDynamicRules(previousRules => {
-//   const previousRuleIds = previousRules.map(rule => rule.id);
-//   chrome.declarativeNetRequest.updateDynamicRules({
-//     removeRuleIds: previousRuleIds,
-//     addRules: blockedUrls
-//   });
-// });
+  const previousRuleIds = previousRules.map(rule => rule.id);
+  chrome.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: previousRuleIds,
+    addRules: newRules
+  });
+});
 
 
-// To add URLs dynamically, you can use chrome.storage to store and retrieve blocked URLs
+// // To add URLs dynamically, you can use chrome.storage to store and retrieve blocked URLs
 // chrome.storage.sync.get(["blockedUrls"], function(result) {
 //   if (result.blockedUrls) {
 //     blockedUrls.push(...result.blockedUrls);
