@@ -54,9 +54,6 @@ async function main() {
     const previousRuleIds = previousRules.map(rule => rule.id);
 
     await updateDynamicRules(previousRuleIds, newRules);
-    console.log(changeAllURL());
-    
-
   } catch (error) {
     console.error("An error occurred:", error);
   }
