@@ -1,19 +1,26 @@
 
-document.getElementById('blockButton').addEventListener('click', function() {
-  const url = document.getElementById('urlInput').value;
-  if (url) {
-    chrome.storage.sync.get(["blockedUrls"], function(result) {
-      const blockedUrls = result.blockedUrls || [];
-      blockedUrls.push(url);
-      chrome.storage.sync.set({blockedUrls: blockedUrls}, function() {
-        updateBlockedList();
-      });
+
+document.addEventListener('DOMContentLoaded', function() {
+  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+    const activeTab = tabs[0];
+    const url = activeTab.url;
+    const domain = new URL(url).hostname;
+    document.getElementById('blockButton').addEventListener('click', function() {
+      if (domain) {
+        chrome.storage.local.get(["blockedUrls"], function(result) {
+          const blockedUrls = result.blockedUrls || [];
+          blockedUrls.push(domain);
+          chrome.storage.local.set({blockedUrls: blockedUrls}, function() {
+            updateBlockedList();
+          });
+        });
+      }
     });
-  }
+  });
 });
 
 function updateBlockedList() {
-  chrome.storage.sync.get(["blockedUrls"], function(result) {
+  chrome.storage.local.get(["blockedUrls"], (result, index) => {
     const blockedList = document.getElementById('blockedList');
     blockedList.innerHTML = '';
     const blockedUrls = result.blockedUrls || [];
@@ -21,7 +28,10 @@ function updateBlockedList() {
       const li = document.createElement('li');
       const button = document.createElement("button");
       button.addEventListener("click", () => {
-        li.remove();
+        blockedUrls.splice(index, 1);
+        chrome.storage.local.set({blockedUrls: blockedUrls}, function() {
+          li.remove();
+        });
       });
       button.textContent = "Delete";
       li.textContent = url;
@@ -32,5 +42,3 @@ function updateBlockedList() {
 }
 
 updateBlockedList();
-
-
