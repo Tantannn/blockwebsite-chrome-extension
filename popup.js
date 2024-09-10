@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (domain) {
         chrome.storage.local.get(["blockedUrls"], function(result) {
           const blockedUrls = result.blockedUrls || [];
+          if (blockedUrls.includes(domain)) return;
           blockedUrls.push(domain);
           chrome.storage.local.set({blockedUrls: blockedUrls}, function() {
             updateBlockedList();
